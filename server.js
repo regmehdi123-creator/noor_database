@@ -1,6 +1,6 @@
 const express = require("express");
-require("dotenv").config();
 const cors = require("cors");
+require("dotenv").config();
 const axios = require("axios");
 
 const app = express();
@@ -270,8 +270,8 @@ app.get("/api/SearchFatwa", async (req, res) => {
 // Start server
 // --------------------------------------------------
 
-app.listen(PORT, () => {
-  console.log(`Noor backend running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Noor backend running on port ${PORT}`);
 });
 
 // Helper function to fetch all fatwas from IslamHouse
