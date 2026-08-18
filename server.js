@@ -56,20 +56,44 @@ app.get("/api/AllFatwa", async (req, res) => {
 // GET /api/fatwa-titles
 // --------------------------------------------------
 
-app.get("/api/FatwaTitles", async (req, res) => {
+// --------------------------------------------------
+// Get ALL fatwas with ONLY id and title (paginated)
+// GET /api/fatwa-titles
+// Query params: page (default: 1), limit (default: 20)
+// --------------------------------------------------
+
+app.get("/api/fatwa-titles", async (req, res) => {
   try {
-    // Fetch all fatwas using your existing helper function
+    // Get pagination parameters from query string
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    
+    // Calculate starting index
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    
+    // Fetch all fatwas
     const allFatwas = await fetchAllFatwas();
+    const total = allFatwas.length;
     
     // Map to only keep id and title
-    const results = allFatwas.map(fatwa => ({
+    const allResults = allFatwas.map(fatwa => ({
       id: fatwa.id,
       title: fatwa.title || fatwa.name || fatwa.fatwa_title || 'Untitled'
     }));
-
+    
+    // Get only the requested page
+    const results = allResults.slice(startIndex, endIndex);
+    
+    // Calculate total pages
+    const totalPages = Math.ceil(total / limit);
+    
     res.json({
       success: true,
-      total: results.length,
+      total: total,
+      page: page,
+      limit: limit,
+      totalPages: totalPages,
       results: results
     });
   } catch (error) {
