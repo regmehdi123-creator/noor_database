@@ -7,9 +7,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
+onst ISLAMHOUSE_KEY = process.env.ISLAMHOUSE_KEY;
 
-const ISLAMHOUSE_KEY = "paV29H2gm56kvLPy";
+const PORT = process.env.PORT || 5000;
+
 const ISLAMHOUSE_BASE = `https://api3.islamhouse.com/v3/${ISLAMHOUSE_KEY}`;
 
 // --------------------------------------------------
