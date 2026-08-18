@@ -51,6 +51,36 @@ app.get("/api/AllFatwa", async (req, res) => {
   }
 });
 
+// --------------------------------------------------
+// Get ALL fatwas with ONLY id and title
+// GET /api/fatwa-titles
+// --------------------------------------------------
+
+app.get("/api/FatwaTitles", async (req, res) => {
+  try {
+    // Fetch all fatwas using your existing helper function
+    const allFatwas = await fetchAllFatwas();
+    
+    // Map to only keep id and title
+    const results = allFatwas.map(fatwa => ({
+      id: fatwa.id,
+      title: fatwa.title || fatwa.name || fatwa.fatwa_title || 'Untitled'
+    }));
+
+    res.json({
+      success: true,
+      total: results.length,
+      results: results
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to get fatwa titles",
+      error: error.message
+    });
+  }
+});
 
 app.get("/api/searchFatwa", async (req, res) => {
   try {
